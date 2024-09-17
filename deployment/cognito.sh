@@ -48,3 +48,4 @@ aws cognito-idp update-user-pool-client --region $REGION --user-pool-id $cognito
 --logout-urls "https://$amplifyDomain/"  \
 --callback-urls "https://$amplifyDomain/" \
 --allowed-o-auth-flows-user-pool-client
+
