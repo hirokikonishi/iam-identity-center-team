@@ -25,11 +25,6 @@ fi
 
 cd ..
 
-aws codecommit create-repository --region $REGION --repository-name team-idc-app --repository-description "Temporary Elevated Access Management (TEAM) Application"
-git remote remove origin
-git remote add origin codecommit::$REGION://team-idc-app
-git push origin main
-
 cd ./deployment
 if [[ ! -z "$TAGS" ]]; then
   if [[ ! -z "$UI_DOMAIN" ]]; then
@@ -43,6 +38,7 @@ if [[ ! -z "$TAGS" ]]; then
         tags="$TAGS" \
         teamAccount="$TEAM_ACCOUNT" \
         customAmplifyDomain="$UI_DOMAIN" \
+        OAuthToken="$OAUTH_TOKEN" \
       --tags $TAGS \
       --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM
   else
@@ -55,6 +51,7 @@ if [[ ! -z "$TAGS" ]]; then
         teamAuditGroup="$TEAM_AUDITOR_GROUP" \
         tags="$TAGS" \
         teamAccount="$TEAM_ACCOUNT" \
+        OAuthToken="$OAUTH_TOKEN" \
       --tags $TAGS \
       --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM
   fi
@@ -70,6 +67,7 @@ else
         teamAccount="$TEAM_ACCOUNT" \
         tags="$TAGS" \
         customAmplifyDomain="$UI_DOMAIN" \
+        OAuthToken="$OAUTH_TOKEN" \
       --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM
   else
     aws cloudformation deploy --region $REGION --template-file template.yml \
@@ -80,6 +78,7 @@ else
         teamAdminGroup="$TEAM_ADMIN_GROUP" \
         teamAuditGroup="$TEAM_AUDITOR_GROUP" \
         teamAccount="$TEAM_ACCOUNT" \
+        OAuthToken="$OAUTH_TOKEN" \
       --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM
   fi
 fi

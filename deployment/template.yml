@@ -25,6 +25,10 @@ Parameters:
     Type: String
     Description: Custom domain for the TEAM application
     Default: ""
+  OAuthToken:
+    Description: "OAuth token for accessing the GitHub repository"
+    Type: String
+    NoEcho: true  
 
 Conditions:
   IsEmptyCloudTrailAuditLogs: !Equals [!Ref CloudTrailAuditLogs, ""]
@@ -63,7 +67,8 @@ Resources:
     Type: "AWS::Amplify::App"
     Properties:
       Name: TEAM-IDC-APP
-      Repository: !Sub https://git-codecommit.${AWS::Region}.amazonaws.com/v1/repos/team-idc-app
+      Repository: "https://github.com/hirokikonishi/iam-identity-center-team"
+      OauthToken: !Ref OAuthToken
       Description: Temporary Elevated Access Management Application
       CustomRules:
         - Source: /<*>
