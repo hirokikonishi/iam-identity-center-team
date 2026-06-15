@@ -129,6 +129,13 @@
           ],
           "category": "function",
           "resourceName": "teamNotifications"
+        },
+        {
+          "attributes": [
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "teamMgmtAccountAssignment"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -265,8 +272,20 @@
           ],
           "category": "function",
           "resourceName": "teamNotifications"
+        },
+        {
+          "attributes": [
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "teamMgmtAccountAssignment"
         }
       ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "teamMgmtAccountAssignment": {
+      "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
@@ -562,6 +581,22 @@
         {
           "category": "function",
           "resourceName": "teamRouter"
+        }
+      ]
+    },
+    "AMPLIFY_function_teamMgmtAccountAssignment_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "teamMgmtAccountAssignment"
+        }
+      ]
+    },
+    "AMPLIFY_function_teamMgmtAccountAssignment_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "teamMgmtAccountAssignment"
         }
       ]
     },
