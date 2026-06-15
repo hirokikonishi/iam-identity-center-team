@@ -15,11 +15,6 @@
     },
     "s3Key": {
       "Type": "String"
-    },
-    "MgmtCrossAccountRoleArn": {
-      "Type": "String",
-      "Default": "",
-      "Description": "ARN of the IAM role in the management account that allows sso:CreateAccountAssignment / sso:DeleteAccountAssignment"
     }
   },
   "Conditions": {
@@ -78,9 +73,7 @@
             "REGION": {
               "Ref": "AWS::Region"
             },
-            "MGMT_CROSS_ACCOUNT_ROLE_ARN": {
-              "Ref": "MgmtCrossAccountRoleArn"
-            }
+            "MGMT_CROSS_ACCOUNT_ROLE_ARN": "arn:aws:iam::397962054574:role/TEAM-MgmtCrossAccountRole"
           }
         },
         "Role": {
@@ -175,47 +168,6 @@
           ]
         }
       }
-    },
-    "CustomLambdaExecutionPolicy": {
-      "Type": "AWS::IAM::Policy",
-      "Properties": {
-        "PolicyName": "custom-lambda-execution-policy",
-        "PolicyDocument": {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Action": ["organizations:DescribeOrganization"],
-              "Resource": ["*"],
-              "Effect": "Allow"
-            },
-            {
-              "Action": [
-                "sso:CreateAccountAssignment",
-                "sso:DeleteAccountAssignment",
-                "sso:DescribeAccountAssignmentCreationStatus",
-                "sso:DescribeAccountAssignmentDeletionStatus"
-              ],
-              "Resource": ["*"],
-              "Effect": "Allow"
-            },
-            {
-              "Action": ["sts:AssumeRole"],
-              "Resource": [
-                {
-                  "Fn::Sub": "arn:aws:iam::*:role/TEAM-MgmtCrossAccountRole"
-                }
-              ],
-              "Effect": "Allow"
-            }
-          ]
-        },
-        "Roles": [
-          {
-            "Ref": "LambdaExecutionRole"
-          }
-        ]
-      },
-      "DependsOn": "LambdaExecutionRole"
     }
   },
   "Outputs": {

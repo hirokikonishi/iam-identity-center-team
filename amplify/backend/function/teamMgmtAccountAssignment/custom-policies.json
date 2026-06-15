@@ -1,1 +1,19 @@
-[]
+[
+  {
+    "Action": ["organizations:DescribeOrganization"],
+    "Resource": ["*"]
+  },
+  {
+    "Action": [
+      "sso:CreateAccountAssignment",
+      "sso:DeleteAccountAssignment",
+      "sso:DescribeAccountAssignmentCreationStatus",
+      "sso:DescribeAccountAssignmentDeletionStatus"
+    ],
+    "Resource": ["*"]
+  },
+  {
+    "Action": ["sts:AssumeRole"],
+    "Resource": ["arn:aws:iam::*:role/TEAM-MgmtCrossAccountRole"]
+  }
+]
