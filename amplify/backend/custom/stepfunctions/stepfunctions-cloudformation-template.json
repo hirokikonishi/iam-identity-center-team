@@ -12,6 +12,10 @@
       "Type": "String",
       "Description": "Input parameter describing Arn attribute for function/teamNotifications resource"
     },
+    "functionteamMgmtAccountAssignmentArn": {
+      "Type": "String",
+      "Description": "Input parameter describing Arn attribute for function/teamMgmtAccountAssignment resource"
+    },
     "customsnsNotificationTopicArn": {
       "Type": "String",
       "Description": "Input parameter describing NotificationTopicArn attribute for custom/sns resource"
@@ -79,18 +83,25 @@
               ],
               "Next": "Update Request Status - in progress",
               "Parameters": {
-                "InstanceArn.$": "$.instanceARN",
-                "PermissionSetArn.$": "$.roleId",
-                "PrincipalId.$": "$.userId",
-                "PrincipalType": "USER",
-                "TargetId.$": "$.accountId",
-                "TargetType": "AWS_ACCOUNT"
+                "FunctionName.$": "$.fn_teamMgmtAccountAssignment_arn",
+                "Payload": {
+                  "action": "grant",
+                  "accountId.$": "$.accountId",
+                  "instanceARN.$": "$.instanceARN",
+                  "roleId.$": "$.roleId",
+                  "userId.$": "$.userId"
+                }
               },
-              "Resource": "arn:aws:states:::aws-sdk:ssoadmin:createAccountAssignment",
+              "Resource": "arn:aws:states:::lambda:invoke",
               "ResultPath": "$.grant",
               "Retry": [
                 {
-                  "ErrorEquals": ["SsoAdmin.ThrottlingException", "ThrottlingException", "ServiceUnavailable", "InternalServerError"],
+                  "ErrorEquals": [
+                    "Lambda.ServiceException",
+                    "Lambda.AWSLambdaException",
+                    "Lambda.SdkClientException",
+                    "Lambda.TooManyRequestsException"
+                  ],
                   "IntervalSeconds": 3,
                   "BackoffRate": 2,
                   "MaxAttempts": 5
@@ -608,18 +619,25 @@
               ],
               "Next": "Notify Requester Session Ended",
               "Parameters": {
-                "InstanceArn.$": "$.instanceARN",
-                "PermissionSetArn.$": "$.roleId",
-                "PrincipalId.$": "$.userId",
-                "PrincipalType": "USER",
-                "TargetId.$": "$.accountId",
-                "TargetType": "AWS_ACCOUNT"
+                "FunctionName.$": "$.fn_teamMgmtAccountAssignment_arn",
+                "Payload": {
+                  "action": "revoke",
+                  "accountId.$": "$.accountId",
+                  "instanceARN.$": "$.instanceARN",
+                  "roleId.$": "$.roleId",
+                  "userId.$": "$.userId"
+                }
               },
-              "Resource": "arn:aws:states:::aws-sdk:ssoadmin:deleteAccountAssignment",
+              "Resource": "arn:aws:states:::lambda:invoke",
               "ResultPath": "$.revoke",
               "Retry": [
                 {
-                  "ErrorEquals": ["SsoAdmin.ThrottlingException", "ThrottlingException", "ServiceUnavailable", "InternalServerError"],
+                  "ErrorEquals": [
+                    "Lambda.ServiceException",
+                    "Lambda.AWSLambdaException",
+                    "Lambda.SdkClientException",
+                    "Lambda.TooManyRequestsException"
+                  ],
                   "IntervalSeconds": 3,
                   "BackoffRate": 2,
                   "MaxAttempts": 5
@@ -1073,8 +1091,10 @@
                 },
                 {
                   "Effect": "Allow",
-                  "Action": ["sso:CreateAccountAssignment"],
-                  "Resource": "*"
+                  "Action": ["lambda:InvokeFunction"],
+                  "Resource": {
+                    "Ref": "functionteamMgmtAccountAssignmentArn"
+                  }
                 },
                 {
                   "Effect": "Allow",
@@ -1173,8 +1193,10 @@
                 },
                 {
                   "Effect": "Allow",
-                  "Action": ["sso:DeleteAccountAssignment"],
-                  "Resource": "*"
+                  "Action": ["lambda:InvokeFunction"],
+                  "Resource": {
+                    "Ref": "functionteamMgmtAccountAssignmentArn"
+                  }
                 },
                 {
                   "Effect": "Allow",
