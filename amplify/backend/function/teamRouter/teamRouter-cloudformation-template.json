@@ -59,6 +59,10 @@
       "Type": "String",
       "Default": "functionteamNotificationsArn"
     },
+    "functionteamMgmtAccountAssignmentArn": {
+      "Type": "String",
+      "Default": "functionteamMgmtAccountAssignmentArn"
+    },
     "customsnsNotificationTopicArn": {
       "Type": "String",
       "Default": "customsnsNotificationTopicArn"
@@ -175,6 +179,9 @@
             },
             "FN_TEAMNOTIFICATIONS_ARN": {
               "Ref": "functionteamNotificationsArn"
+            },
+            "FN_TEAM_MGMT_ACCOUNT_ASSIGNMENT_ARN": {
+              "Ref": "functionteamMgmtAccountAssignmentArn"
             }
           }
         },
